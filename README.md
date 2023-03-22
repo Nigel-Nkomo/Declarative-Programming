@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Declarative programming in React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> declare what you want to show and react will figure out how to update the UI
 
-## Available Scripts
+1. Identify your component's visual states
+2. Determine what triggers those states
+3. Represent state in memory using useState
+4. Remove any non-essential state variables
+5. Connect event handlers to set the state
 
-In the project directory, you can run:
+## Identify your component's visual states
 
-### `npm start`
+- visualise all the diffent visual states of the UI the _user_ might _see_ and create a mock.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* **Empty**: Form has a **disabled "Submit" button**.
+* **Typing**: Form has an **enabled "Submit button**.
+* **Submitting**: Form is **completely disabled**. Spinner is shown.
+* **Success**: "Thank you" message is shown instead of form.
+* **Error**: Same as typing state with an extra error message
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Determine what triggers those state changes
 
-### `npm test`
+- **human inputs** like clicking buttons, typing in a field or navigating a link
+- **computer inputs** like a network response arriving, a timeout completing or an image loading
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In both cases, set state variables to update the UI
 
-### `npm run build`
+- changing the text input (human) from "empty" to "typing" or back depending on whether or not the textbox is empty
+- clicking the submit button (human) should switch from "typing" to "submitting"
+- successful network response (computer) should switch from "submitting" to "success"
+- failed network response (computer) should switch from "submitting" to "error".
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Represent state in memory using useState
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- start with state that must be there
+- experiment
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Remove any non-essential state variables
 
-### `npm run eject`
+const [answer, setAnswer] = useState('')
+const [error, setError] = useState(null)
+const [isEmpty, setIsEmpty] = useState(true)
+const [isTyping, setIsTyping] = useState(false)
+const [isSubmitting, setIsSubmitting] = useState(false)
+const [isSuccess, setIsSuccess] = useState(false)
+const [isError, setIsError] = useState(false)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- does it cause a paradox?
+- Is the same information available in another state variable already?
+- Can you get the same information from the inverse of another state variable?
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const [answer, setAnswer] = useState('')  
+const [error, setError] = useState(null)
+const [status, setStatus] = useState('typing') // 'typing', 'submitting', or 'success'
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Connect event handlers to set state
